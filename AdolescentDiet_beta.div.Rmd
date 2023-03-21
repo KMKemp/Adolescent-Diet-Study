@@ -1,0 +1,70 @@
+---
+title: "Diet.beta.div"
+author: "Keri Kemp"
+date: '2022-07-14'
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r, global_options, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, tidy.opts=list(width.cutoff=60)) 
+knitr::opts_knit$set(root.dir = "~/Library/CloudStorage/Box-Box/_Mrug/Diet/R_analysis/Beta_diversity") #desktop
+#knitr::opts_knit$set(root.dir = "~/Box/_Mrug/Diet/R_analysis") #laptop
+```
+
+```{r message=FALSE, include=FALSE}
+#Load libraries
+library(tidyverse)
+library(phyloseq)
+library(vegan)
+library(ggplot2)
+library(ggfortify)
+library(ape)
+```
+
+
+### Import cleaned microbiome data into phyloseq
+```{r message=FALSE, include=TRUE}
+
+# read data in 
+otu <- read.table("~/Library/CloudStorage/Box-Box/_Mrug/Diet/R_analysis/_bin/Diet_asv_table.txt",header=TRUE, row.names=1)
+samples<-read.table("~/Library/CloudStorage/Box-Box/_Mrug/Diet/R_analysis/_bin/Diet_full_map.txt",sep="\t",header=T,row.names=2)
+
+OTU = otu_table(otu, taxa_are_rows=FALSE)
+Diet <- phyloseq(OTU,
+               sample_data(samples)
+               )
+
+# Inspect the phyloseq object
+Diet
+# phyloseq-class experiment-level object
+# otu_table()   OTU Table:         [ 1253 taxa and 137 samples ]
+# sample_data() Sample Data:       [ 137 samples by 51 sample variables ]
+
+```
+
+### Calculate Bray-curtis Distance Matrix on rarefied ASV count data
+```{r message=FALSE, include=TRUE}
+
+set.seed(5455)
+rare_ps <- phyloseq::rarefy_even_depth(Diet)
+otu_rare = as.data.frame(as(otu_table(rare_ps), "matrix"))
+
+bray_dist <- vegan::vegdist(otu_rare, method="bray", transformation = "hellinger")
+jac_dist <- vegan::vegdist(otu_rare, method="jaccard", transformation = "hellinger")
+
+```
+
+### Permutational analysis of variance (PERMANOVA) using vegan's adonis2 function
+The adonis function works by first finding the centroids for each group and then calculating the squared deviations of each of site to that centroid. Then significance tests are performed using F-tests based on sequential sums of squares from permutations of the raw data.
+
+### I. PERMANOVA - Covariates
+
+```{r}
+adonis2(bray_dist~female, samples, permutations=999)
+
+adonis2(bray_dist~c1zbmi, samples, permutations=999)
+
+adonis2(bray_dist~FISMean, samples, permutations=999)
+
+adonis2(bray_dist~SES, samples, permutations=999)
