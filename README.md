@@ -1,2 +1,4 @@
 # Adolescent-Diet-Study
 Adolescent Diet Study: University of Alabama at Birmingham
+
+The relationship between dietary habits and microbiota composition during adolescence has not been well examined. This is a crucial knowledge gap to fill considering that diet-microbiota interactions influence neurodevelopment, immune system maturation and metabolic regulation. This study examined the associations between diet and the gut microbiota in a school-based sample of 136 adolescents (mean age of 12.1 years; age range 11 to 13 years; 48 percent female; 47 percent Black, 38 percent non-Hispanic White, 15 percent Hispanic or other minorities) from urban, suburban and rural areas in the Southeast USA. Adolescents completed the Rapid Eating Assessment for Participants and provided stool samples for 16S ribosomal RNA gene sequencing. The 16S rRNA gut microbial sequencing data are accessible at this NCBI link: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1119528.
